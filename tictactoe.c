@@ -18,25 +18,30 @@ void printBoard(char board[3][3]){
 	}
 }
 bool checkWin(char board[3][3]){
+	// horizontal check
 	for(int i = 0; i < 3; i++){
 		if(board[0][i] == board[1][i] && board[1][i] == board[2][i] && board[0][i] != '-'){
 			return true;
 		}
 	}
+	// vertical check
 	for(int i = 0; i < 3; i++){
 		if(board[i][0] == board[i][1] && board[i][1] == board[i][2] && board[i][0] != '-'){
 			return true;
 		}
 	}
+	// diagonal check
 	if(board[0][0] == board[1][1] && board[1][1] == board[2][2] && board[0][0] != '-'){
 		return true;
 	}
+	// diagonal check
 	if(board[2][0] == board[1][1] && board[1][1] == board[0][2] && board[2][0] != '-'){
 		return true;
 	}
 	return false;
 }
 bool checkValidMove(int row, int column, char board[3][3]){
+	// if the board spot is empty and the spot isn't out of bounds it is valid
 	if(board[row][column] == '-' && row >= 0 && row < 3 && column >= 0 && column < 3){
 		return true;
 	}
@@ -78,20 +83,26 @@ void tictactoe(bool p2Human){
 		
 		// if vs CPU, computer picks random spot
 		if(!p2Human && turnCounter == 2){
+			// random spot
 			row = rand()%3;
 			column = rand()%3;
+			// check validity
 			while(!checkValidMove(row, column, board)){
+				// remake random spot
 				row = rand()%3;
 				column = rand()%3;
 			}
 			printf("The computer has picked: (%d,%d).\n", row,column);
 		} else{
+			// get p2 input
 			printf("Input the row (0-2): ");
 			scanf("%d", &row);
 			printf("Input the column (0-2): ");
 			scanf("%d", &column);
 		}
+		// check validity
 		validMove = checkValidMove(row, column, board);
+		// update board / turn counter
 		if(turnCounter == 1){
 			if(validMove){
 				board[row][column] = 'x';
@@ -107,6 +118,7 @@ void tictactoe(bool p2Human){
 				printf("Invalid row/column combination. Pick again.\n");
 			}
 		}
+		// check if board is in a winning state
 		gameFinished = checkWin(board);
 	}
 	printBoard(board);
@@ -132,11 +144,5 @@ int main(){
 			tictactoe(false);
 			break;
 	}
-
-	// bool gameFinished = false;
-	// // while the game has not concluded
-	// while(!gameFinished){
-	// 	// if it's the oppon
-	// }
 	return 0;
 }
