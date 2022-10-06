@@ -1,9 +1,11 @@
 #include <stdio.h>
 #include <stdbool.h>
+#include <time.h>
 
 void printOptions(){
 	printf("Options:\n");
-	printf("a) tictactoe\n");
+	printf("a) 2 player mode\n");
+	printf("b) 1 player mode (vs CPU)\n");
 	printf("Enter option: ");
 }
 
@@ -40,8 +42,18 @@ bool checkValidMove(int row, int column, char board[3][3]){
 	}
 	return false;
 }
-void tictactoe(){
+void tictactoe(bool p2Human){
+
+	// setup random based on time
+	time_t t;
+	srand((unsigned)time(&t));
+
 	int turnCounter = 1;
+	if(!p2Human){
+		printf("Would you like to go first or second (1 = 1st; 2 = 2nd): ");
+		scanf("%d",&turnCounter);
+	}
+
 	// initialize board to be empty
 	char board[3][3];
 	for(int i = 0; i < 3; i++){
@@ -53,16 +65,32 @@ void tictactoe(){
 	// track if game is finished
 	bool gameFinished = false;
 	bool validMove = false;
+
+	// variables to track which row/column
 	int row;
 	int column;
+
 	// game main loop
 	while(!gameFinished){
 
+		// output board
 		printBoard(board);
-		printf("Input the row (0-2): ");
-		scanf("%d", &row);
-		printf("Input the column (0-2): ");
-		scanf("%d", &column);
+		
+		// if vs CPU, computer picks random spot
+		if(!p2Human && turnCounter == 2){
+			row = rand()%3;
+			column = rand()%3;
+			while(!checkValidMove(row, column, board)){
+				row = rand()%3;
+				column = rand()%3;
+			}
+			printf("The computer has picked: (%d,%d).\n", row,column);
+		} else{
+			printf("Input the row (0-2): ");
+			scanf("%d", &row);
+			printf("Input the column (0-2): ");
+			scanf("%d", &column);
+		}
 		validMove = checkValidMove(row, column, board);
 		if(turnCounter == 1){
 			if(validMove){
@@ -98,7 +126,11 @@ int main(){
 	// if its tictactoe --> run tictactoe program
 	switch(option){
 		case 'a':
-			tictactoe();
+			tictactoe(true);
+			break;
+		case 'b':
+			tictactoe(false);
+			break;
 	}
 
 	// bool gameFinished = false;
