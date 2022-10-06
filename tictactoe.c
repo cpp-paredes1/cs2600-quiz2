@@ -34,7 +34,12 @@ bool checkWin(char board[3][3]){
 	}
 	return false;
 }
-
+bool checkValidMove(int row, int column, char board[3][3]){
+	if(board[row][column] == '-' && row >= 0 && row < 3 && column >= 0 && column < 3){
+		return true;
+	}
+	return false;
+}
 void tictactoe(){
 	int turnCounter = 1;
 	// initialize board to be empty
@@ -47,6 +52,7 @@ void tictactoe(){
 
 	// track if game is finished
 	bool gameFinished = false;
+	bool validMove = false;
 	int row;
 	int column;
 	// game main loop
@@ -57,21 +63,17 @@ void tictactoe(){
 		scanf("%d", &row);
 		printf("Input the column (0-2): ");
 		scanf("%d", &column);
-
+		validMove = checkValidMove(row, column, board);
 		if(turnCounter == 1){
-			if(board[row][column] == '-'){
+			if(validMove){
 				board[row][column] = 'x';
-			}
-			if(row < 3 && row >= 0 && column < 3 && column >= 0){
 				turnCounter = 2;
 			} else{
 				printf("Invalid row/column combination. Pick again.\n");
 			}
 		} else {
-			if(board[row][column] == '-'){
+			if(validMove){
 				board[row][column] = 'o';
-			}
-			if(row < 3 && row >= 0 && column < 3 && column >= 0){
 				turnCounter = 1;
 			} else{
 				printf("Invalid row/column combination. Pick again.\n");
