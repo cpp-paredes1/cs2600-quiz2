@@ -74,9 +74,9 @@ void tictactoe(bool p2Human){
 	// variables to track which row/column
 	int row;
 	int column;
-
+	int spaceLeft = 9;
 	// game main loop
-	while(!gameFinished){
+	while(!gameFinished && spaceLeft != 0){
 
 		// output board
 		printBoard(board);
@@ -102,11 +102,14 @@ void tictactoe(bool p2Human){
 		}
 		// check validity
 		validMove = checkValidMove(row, column, board);
+		// check for draw
+		
 		// update board / turn counter
 		if(turnCounter == 1){
 			if(validMove){
 				board[row][column] = 'x';
 				turnCounter = 2;
+				spaceLeft--;
 			} else{
 				printf("Invalid row/column combination. Pick again.\n");
 			}
@@ -114,6 +117,7 @@ void tictactoe(bool p2Human){
 			if(validMove){
 				board[row][column] = 'o';
 				turnCounter = 1;
+				spaceLeft--;
 			} else{
 				printf("Invalid row/column combination. Pick again.\n");
 			}
@@ -122,10 +126,14 @@ void tictactoe(bool p2Human){
 		gameFinished = checkWin(board);
 	}
 	printBoard(board);
-	if(turnCounter == 2){
-		printf("Player 1 wins.");
+	if(spaceLeft == 0){
+		printf("Draw.");
 	} else{
-		printf("Player 2 wins.");
+		if(turnCounter == 2){
+			printf("Player 1 wins.");
+		} else{
+			printf("Player 2 wins.");
+		}
 	}
 }
 
